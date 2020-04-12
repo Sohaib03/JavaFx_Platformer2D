@@ -1,0 +1,64 @@
+package main;
+
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+
+public class Controller {
+    private Scene gameScene;
+
+    private boolean LeftKeyPressed;
+    private boolean RightKeyPressed;
+    private boolean mouseClicked;
+
+    public Controller(Scene gameScene) {
+        this.gameScene = gameScene;
+        setControls();
+    }
+
+    private void setControls () {
+
+        gameScene.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("Yes");
+                mouseClicked = true;
+            }
+        });
+        gameScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                mouseClicked = false;
+            }
+        });
+
+        gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.LEFT) LeftKeyPressed = true;
+                if (event.getCode() == KeyCode.RIGHT) RightKeyPressed = true;
+            }
+        });
+        gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.LEFT) LeftKeyPressed = false;
+                if (event.getCode() == KeyCode.RIGHT) RightKeyPressed = false;
+            }
+        });
+    }
+
+    public boolean isLeftKeyPressed() {
+        return LeftKeyPressed;
+    }
+    public boolean isRightKeyPressed() {
+        return RightKeyPressed;
+    }
+
+    public boolean getMouseState() {
+        return mouseClicked;
+    }
+}
