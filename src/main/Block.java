@@ -8,7 +8,7 @@ public class Block {
 
     private static Image blockTop = new Image("resources/DirtBlock/images/block(2).png");
     private static Image blockBottom = new Image("resources/DirtBlock/images/block(5).png");
-    public int width, height, posX, posY;
+    private int width, height, posX, posY;
 
     private static final int WIDTH = 16;
     private static final int HEIGHT = 16;
@@ -34,4 +34,18 @@ public class Block {
         }
     }
 
+    public int getWidth(){
+        return WIDTH * width;
+    }
+
+    public int getHeight() {
+        return HEIGHT * height;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+    public int getPosY() {
+        return posY;
+    }
 }

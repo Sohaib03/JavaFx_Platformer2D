@@ -16,11 +16,12 @@ public class GameEntities {
 
     private void addGameItems() {
         player = new Player();
-
+        player.getPlayerImage().setLayoutX(100);
+        player.getPlayerImage().setLayoutY(100);
         gamePane.getChildren().add(player.getPlayerImage());
 
-        blocks[0] = new Block(gamePane, 5, 5, 0, 100);
-        blocks[1] = new Block(gamePane, 7, 8, 80, 52);
+        blocks[0] = new Block(gamePane, 5, 5, 0, 266);
+        blocks[1] = new Block(gamePane, 7, 8, 80, 152+66);
 
     }
 

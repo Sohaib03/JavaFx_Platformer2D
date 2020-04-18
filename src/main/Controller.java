@@ -12,6 +12,7 @@ public class Controller {
 
     private boolean LeftKeyPressed;
     private boolean RightKeyPressed;
+    private boolean UpKeyPressed;
     private boolean mouseClicked;
 
     public Controller(Scene gameScene) {
@@ -40,6 +41,7 @@ public class Controller {
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.LEFT) LeftKeyPressed = true;
                 if (event.getCode() == KeyCode.RIGHT) RightKeyPressed = true;
+                if (event.getCode() == KeyCode.UP) UpKeyPressed = true;
             }
         });
         gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -47,6 +49,7 @@ public class Controller {
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.LEFT) LeftKeyPressed = false;
                 if (event.getCode() == KeyCode.RIGHT) RightKeyPressed = false;
+                if (event.getCode() == KeyCode.UP) UpKeyPressed = false;
             }
         });
     }
@@ -57,7 +60,7 @@ public class Controller {
     public boolean isRightKeyPressed() {
         return RightKeyPressed;
     }
-
+    public boolean isUpKeyPressed() { return UpKeyPressed; }
     public boolean getMouseState() {
         return mouseClicked;
     }
