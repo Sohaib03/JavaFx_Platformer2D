@@ -26,16 +26,16 @@ public class GameLoop extends AnimationTimer {
                 player.getPlayerImage().setScaleX(-1);
                 player.direction = -1;
             }
-            player.getPlayerImage().setLayoutX(player.getPlayerImage().getLayoutX() - 2);
-
+            //player.getPlayerImage().setLayoutX(player.getPlayerImage().getLayoutX() - 2);
+            moveLeft(2);
         }
         if (controller.isRightKeyPressed()) {
             if (player.direction == -1) {
                 player.getPlayerImage().setScaleX(1);
                 player.direction = 1;
             }
-            player.getPlayerImage().setLayoutX(player.getPlayerImage().getLayoutX() + 2);
-
+            //player.getPlayerImage().setLayoutX(player.getPlayerImage().getLayoutX() + 2);
+            moveRight(2);
         }
 
         if (player.grounded && controller.isUpKeyPressed()) {
@@ -44,11 +44,17 @@ public class GameLoop extends AnimationTimer {
         }
 
         if (!player.grounded) {
-            player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() - (double)player.velocity_y/12);
+            //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() - (double)player.velocity_y/12);
+            if (player.velocity_y >= 0) {
+                moveUp(player.velocity_y/12);
+            }
+            else {
+                moveDown(-player.velocity_y/12);
+            }
         }
         gravity();
 
-        collision_handle();
+        //collision_handle();
 
     }
 
@@ -57,15 +63,14 @@ public class GameLoop extends AnimationTimer {
             player.velocity_y -= g_acc;
         }
 
-        if (player.getPlayerImage().getLayoutY() > 200) player.grounded = true;
+        //if (player.getPlayerImage().getLayoutY() > 200) player.grounded = true;
     }
 
-    private void collision_handle() {
-
+    private void moveUp(int x) {
         int px1 = (int)player.getPlayerImage().getLayoutX();
-        int py1 = (int)player.getPlayerImage().getLayoutY();
-        int px2 = px1 + player.WIDTH;
-        int py2 = py1 + player.HEIGHT;
+        int py1 = (int)player.getPlayerImage().getLayoutY() - x;
+        int px2 = px1 + player.WIDTH-1;
+        int py2 = py1 + player.HEIGHT-1;
 
         for (Block block : gameEntities.blocks) {
             if (block == null) continue;
@@ -75,11 +80,103 @@ public class GameLoop extends AnimationTimer {
             int bx2 = bx1 + block.getWidth();
             int by2 = by1 + block.getHeight();
 
-            if (px2>bx1 && px2<bx2 && py2 > by1 && py2 < by2) {
-                System.out.println("Collsion -> "+ Integer.toString((int) px1) + " " + Integer.toString(px2));
+            if (py1>by1 && py1 < by2) {
+                if (px2 > bx1 && px2<bx2) {
+                    return;
+                }
+                else if (px1>bx1 && px1 < bx2) {
+                    return;
+                }
             }
-
         }
+        player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() - x);
     }
+
+    private void moveDown(int x) {
+        int px1 = (int)player.getPlayerImage().getLayoutX();
+        int py1 = (int)player.getPlayerImage().getLayoutY() + x;
+        int px2 = px1 + player.WIDTH-1;
+        int py2 = py1 + player.HEIGHT-1;
+
+        for (Block block : gameEntities.blocks) {
+            if (block == null) continue;
+            // top collision
+            int bx1 = block.getPosX();
+            int by1 = block.getPosY();
+            int bx2 = bx1 + block.getWidth();
+            int by2 = by1 + block.getHeight();
+
+            if (py2>by1 && py2<by2) {
+                if (px2 > bx1 && px2<bx2) {
+                    player.grounded = true;
+                    //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
+                    return;
+                }
+                else if (px1>bx1 && px1 < bx2) {
+                    player.grounded = true;
+                    //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
+                    return;
+                }
+            }
+        }
+        player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + x);
+    }
+
+
+
+    private void moveRight(int x) {
+
+        int px1 = (int)player.getPlayerImage().getLayoutX()+x;
+        int py1 = (int)player.getPlayerImage().getLayoutY();
+        int px2 = px1 + player.WIDTH-1;
+        int py2 = py1 + player.HEIGHT-1;
+
+        for (Block block : gameEntities.blocks) {
+            if (block == null) continue;
+            // top collision
+            int bx1 = block.getPosX();
+            int by1 = block.getPosY();
+            int bx2 = bx1 + block.getWidth();
+            int by2 = by1 + block.getHeight();
+
+            if (px2>bx1 && px2<bx2) {
+                if (py2 > by1 && py2 < by2) {
+                    return;
+                } else if (py1 > by1 && py1 < by2) {
+                    return;
+                }
+            }
+        }
+
+        player.getPlayerImage().setLayoutX(player.getPlayerImage().getLayoutX() + x);
+    }
+
+    private void moveLeft(int x) {
+
+        int px1 = (int)player.getPlayerImage().getLayoutX() - x;
+        int py1 = (int)player.getPlayerImage().getLayoutY();
+        int px2 = px1 + player.WIDTH-1;
+        int py2 = py1 + player.HEIGHT-1;
+
+        for (Block block : gameEntities.blocks) {
+            if (block == null) continue;
+
+            int bx1 = block.getPosX();
+            int by1 = block.getPosY();
+            int bx2 = bx1 + block.getWidth();
+            int by2 = by1 + block.getHeight();
+
+            if (px1>bx1 && px1<bx2) {
+                if (py2 > by1 && py2 < by2) {
+                    return;
+                } else if (py1 > by1 && py1 < by2) {
+                    return;
+                }
+            }
+        }
+
+        player.getPlayerImage().setLayoutX(player.getPlayerImage().getLayoutX() - x);
+    }
+
 
 }
