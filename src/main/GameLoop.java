@@ -43,6 +43,7 @@ public class GameLoop extends AnimationTimer {
         if (player.grounded && controller.isUpKeyPressed()) {
             player.velocity_y = 80;
             player.grounded = false;
+            ground = null;
         }
 
         if (!player.grounded) {
@@ -54,6 +55,11 @@ public class GameLoop extends AnimationTimer {
                 moveDown(-player.velocity_y/12);
             }
         }
+
+        if (controller.isDebugClicked()) {
+            System.out.printf("%d,%d\n", (int)player.getPlayerImage().getLayoutX(), (int)player.getPlayerImage().getLayoutY());
+        }
+
         gravity();
 
         //collision_handle();
@@ -61,7 +67,7 @@ public class GameLoop extends AnimationTimer {
     }
 
     private void gravity() {
-
+        checkGround();
         if (!player.grounded) {
             player.velocity_y -= g_acc;
         }
@@ -112,13 +118,15 @@ public class GameLoop extends AnimationTimer {
             if (py2>by1 && py2<by2) {
                 if (px2 > bx1 && px2<bx2) {
                     player.grounded = true;
-                    //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
+                    player.getPlayerImage().setLayoutY(( by1 + 1 - player.HEIGHT ));
+                    System.out.printf("%d,%d  %d,%d\n", py1, py2, by1, by2);
                     ground = block;
                     return;
                 }
                 else if (px1>bx1 && px1 < bx2) {
                     player.grounded = true;
-                    //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
+                    player.getPlayerImage().setLayoutY(( by1 + 1 - player.HEIGHT ) );
+                    System.out.printf("%d,%d  %d,%d\n", py1, py2, by1, by2);
                     ground = block;
                     return;
                 }
@@ -131,7 +139,7 @@ public class GameLoop extends AnimationTimer {
         if (ground == null) player.grounded = false;
         else {
             int px1 = (int)player.getPlayerImage().getLayoutX();
-            int py1 = (int)player.getPlayerImage().getLayoutY() + 2;
+            int py1 = (int)player.getPlayerImage().getLayoutY() + 5;
             int px2 = px1 + player.WIDTH-1;
             int py2 = py1 + player.HEIGHT-1;
 
@@ -143,14 +151,10 @@ public class GameLoop extends AnimationTimer {
             if (py2>by1 && py2<by2) {
                 if (px2 > bx1 && px2<bx2) {
                     player.grounded = true;
-                    //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
-                    System.out.println("Collision");
                     return;
                 }
                 else if (px1>bx1 && px1 < bx2) {
                     player.grounded = true;
-                    //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
-                    System.out.println("Collision");
                     return;
                 }
             }

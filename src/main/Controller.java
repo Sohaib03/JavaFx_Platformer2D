@@ -14,6 +14,7 @@ public class Controller {
     private boolean RightKeyPressed;
     private boolean UpKeyPressed;
     private boolean mouseClicked;
+    private boolean debugClicked;
 
     public Controller(Scene gameScene) {
         this.gameScene = gameScene;
@@ -42,6 +43,7 @@ public class Controller {
                 if (event.getCode() == KeyCode.LEFT) LeftKeyPressed = true;
                 if (event.getCode() == KeyCode.RIGHT) RightKeyPressed = true;
                 if (event.getCode() == KeyCode.UP) UpKeyPressed = true;
+                if (event.getCode() == KeyCode.DIGIT1) debugClicked = true;
             }
         });
         gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -50,6 +52,7 @@ public class Controller {
                 if (event.getCode() == KeyCode.LEFT) LeftKeyPressed = false;
                 if (event.getCode() == KeyCode.RIGHT) RightKeyPressed = false;
                 if (event.getCode() == KeyCode.UP) UpKeyPressed = false;
+                if (event.getCode() == KeyCode.DIGIT1) debugClicked = false;
             }
         });
     }
@@ -63,5 +66,8 @@ public class Controller {
     public boolean isUpKeyPressed() { return UpKeyPressed; }
     public boolean getMouseState() {
         return mouseClicked;
+    }
+    public boolean isDebugClicked() {
+        return debugClicked;
     }
 }
