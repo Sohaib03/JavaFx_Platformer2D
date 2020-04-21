@@ -10,6 +10,8 @@ public class GameLoop extends AnimationTimer {
     private GameEntities gameEntities;
     private Player player;
     private int g_acc = 4;
+    private Block ground;
+
 
     public GameLoop(AnchorPane gamePane, Controller controller, GameEntities gameEntities) {
         this.gamePane = gamePane;
@@ -59,6 +61,7 @@ public class GameLoop extends AnimationTimer {
     }
 
     private void gravity() {
+
         if (!player.grounded) {
             player.velocity_y -= g_acc;
         }
@@ -110,11 +113,13 @@ public class GameLoop extends AnimationTimer {
                 if (px2 > bx1 && px2<bx2) {
                     player.grounded = true;
                     //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
+                    ground = block;
                     return;
                 }
                 else if (px1>bx1 && px1 < bx2) {
                     player.grounded = true;
                     //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
+                    ground = block;
                     return;
                 }
             }
@@ -122,7 +127,37 @@ public class GameLoop extends AnimationTimer {
         player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + x);
     }
 
+    private void checkGround() {
+        if (ground == null) player.grounded = false;
+        else {
+            int px1 = (int)player.getPlayerImage().getLayoutX();
+            int py1 = (int)player.getPlayerImage().getLayoutY() + 2;
+            int px2 = px1 + player.WIDTH-1;
+            int py2 = py1 + player.HEIGHT-1;
 
+            int bx1 = ground.getPosX();
+            int by1 = ground.getPosY();
+            int bx2 = bx1 + ground.getWidth();
+            int by2 = by1 + ground.getHeight();
+
+            if (py2>by1 && py2<by2) {
+                if (px2 > bx1 && px2<bx2) {
+                    player.grounded = true;
+                    //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
+                    System.out.println("Collision");
+                    return;
+                }
+                else if (px1>bx1 && px1 < bx2) {
+                    player.grounded = true;
+                    //player.getPlayerImage().setLayoutY(player.getPlayerImage().getLayoutY() + ( by1 + 1 - player.HEIGHT ) );
+                    System.out.println("Collision");
+                    return;
+                }
+            }
+
+            player.grounded = false;
+        }
+    }
 
     private void moveRight(int x) {
 
