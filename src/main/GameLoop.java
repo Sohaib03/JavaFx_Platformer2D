@@ -1,5 +1,6 @@
 package main;
 
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.AnchorPane;
 
@@ -24,6 +25,11 @@ public class GameLoop extends AnimationTimer {
     @Override
     public void handle(long now) {
         if (controller.isLeftKeyPressed()) {
+            if (player.idleAnimation.getStatus() != Animation.Status.STOPPED) {
+                player.idleAnimation.stop();
+                player.runAnimation.play();
+            }
+
             if (player.direction == 1) {
                 player.getPlayerImage().setScaleX(-1);
                 player.direction = -1;
@@ -31,13 +37,24 @@ public class GameLoop extends AnimationTimer {
             //player.getPlayerImage().setLayoutX(player.getPlayerImage().getLayoutX() - 2);
             moveLeft(2);
         }
-        if (controller.isRightKeyPressed()) {
+        else if (controller.isRightKeyPressed()) {
+            if (player.idleAnimation.getStatus() != Animation.Status.STOPPED) {
+                player.idleAnimation.stop();
+                player.runAnimation.play();
+            }
+
             if (player.direction == -1) {
                 player.getPlayerImage().setScaleX(1);
                 player.direction = 1;
             }
             //player.getPlayerImage().setLayoutX(player.getPlayerImage().getLayoutX() + 2);
             moveRight(2);
+        }
+        else {
+            if (player.idleAnimation.getStatus() == Animation.Status.STOPPED) {
+                player.runAnimation.stop();
+                player.idleAnimation.play();
+            }
         }
 
         if (player.grounded && controller.isUpKeyPressed()) {
@@ -139,7 +156,7 @@ public class GameLoop extends AnimationTimer {
         if (ground == null) player.grounded = false;
         else {
             int px1 = (int)player.getPlayerImage().getLayoutX();
-            int py1 = (int)player.getPlayerImage().getLayoutY() + 5;
+            int py1 = (int)player.getPlayerImage().getLayoutY() + 2;
             int px2 = px1 + player.WIDTH-1;
             int py2 = py1 + player.HEIGHT-1;
 
